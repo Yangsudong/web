@@ -22,7 +22,7 @@ public class DeptDAO {
 		try {
 			conn = ConnectionManager.getConnnect();
 			String sql = " SELECT DEPARTMENT_ID, DEPARTMENT_NAME, MANAGER_ID mgr_id, LOCATION_ID"
-					   + " FROM DEPARTMENTS"
+					   + " FROM HR.DEPARTMENTS"
 					   + " ORDER BY DEPARTMENT_ID ";
 			
 			pstmt = conn.prepareStatement(sql);			
@@ -53,7 +53,7 @@ public class DeptDAO {
 		try {
 			conn = ConnectionManager.getConnnect();
 			String sql = " SELECT DEPARTMENT_ID, DEPARTMENT_NAME, MANAGER_ID mgr_id, LOCATION_ID"
-					   + " FROM DEPARTMENTS"
+					   + " FROM HR.DEPARTMENTS"
 					   + " WHERE DEPARTMENT_ID = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1,deptVO.getDepartment_id());
@@ -84,7 +84,7 @@ public class DeptDAO {
 	public void delete(DeptVO deptVO) {
 		try {
 			conn = ConnectionManager.getConnnect();
-			String sql = "delete from departments where department_id = ?";
+			String sql = "DELETE FROM HR.DEPARTMENTS WHERE DEPARTMENT_ID = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, deptVO.getDepartment_id());
 			int r = pstmt.executeUpdate();
@@ -100,7 +100,7 @@ public class DeptDAO {
 	public void update(DeptVO deptVO) {
 		try {
 			conn = ConnectionManager.getConnnect();
-			String sql = "update departments set department_name = ? where department_id = ?";
+			String sql = "UPDATE HR.DEPARTMENTS SET DEPARTMENT_NAME = ? WHERE DEPARTMENT_ID = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, deptVO.getDepartment_name());
 			pstmt.setInt(2, deptVO.getDepartment_id());
@@ -120,7 +120,7 @@ public class DeptDAO {
 		 conn = ConnectionManager.getConnnect();
 			
 			//2.sql 구문 실행
-			String sql = "insert into departments (department_id, department_name)" 
+			String sql = "INSERT INTO HR.DEPARTMENTS (DEPARTMENT_ID, DEPARTMENT_NAME)" 
 						+ " values ( " 
 						+ deptVO.getDepartment_id() 
 						+ ",'"

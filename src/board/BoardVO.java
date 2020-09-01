@@ -1,4 +1,4 @@
-package boardVO;
+package board;
 
 import java.sql.Date;
 
@@ -7,13 +7,13 @@ public class BoardVO {
 	private String poster;
 	private String subject;
 	private String contents; 
-	private Date lastpost;
+	private String lastpost;
 	private Integer views;
 	private String filename;
 	
 	public BoardVO() {}
 	
-	public BoardVO(Integer no, String poster, String subject, String contents, Date lastpost, Integer views, String filename) {
+	public BoardVO(Integer no, String poster, String subject, String contents, String lastpost, Integer views, String filename) {
 		super();	
 		this.no = no;
 		this.poster = poster;
@@ -54,10 +54,10 @@ public class BoardVO {
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
-	public Date getLastpost() {
+	public String getLastpost() {
 		return lastpost;
 	}
-	public void setLastpost(Date lastpost) {
+	public void setLastpost(String lastpost) {
 		this.lastpost = lastpost;
 	}
 	public Integer getViews() {

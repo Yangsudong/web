@@ -1,4 +1,4 @@
-package boardVO;
+package board;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +32,7 @@ public class BoardDAO {
 				resultVO.setPoster(rs.getString(2));
 				resultVO.setSubject(rs.getString(3));
 				resultVO.setContents(rs.getString(4));
-				resultVO.setLastpost(rs.getDate(5));
+				resultVO.setLastpost(rs.getString(5));
 				resultVO.setViews(rs.getInt(6));
 				resultVO.setFilename(rs.getString(7));
 				list.add(resultVO);
@@ -65,7 +65,7 @@ public class BoardDAO {
 				resultVO.setPoster(rs.getString(2));
 				resultVO.setSubject(rs.getString(3));
 				resultVO.setContents(rs.getString(4));
-				resultVO.setLastpost(rs.getDate(5));
+				resultVO.setLastpost(rs.getString(5));
 				resultVO.setViews(rs.getInt(6));
 				resultVO.setFilename(rs.getString(7));
 				
@@ -120,15 +120,15 @@ public class BoardDAO {
 		 conn = ConnectionManager.getConnnect();
 			
 			//2.sql 구문 실행
-		 String sql = "INSERT INTO BOARD VALUES(?,?,?,?,?,?,?)"; 
+		 String sql = "INSERT INTO BOARD VALUES(?,?,?,?,sysdate,?,?)"; 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardVO.getNo());
 			pstmt.setString(2, boardVO.getPoster());	
 			pstmt.setString(3, boardVO.getSubject());	
 			pstmt.setString(4, boardVO.getContents());	
-			pstmt.setDate(5, boardVO.getLastpost());	
-			pstmt.setInt(6, boardVO.getViews());	
-			pstmt.setString(7, boardVO.getFilename());
+			//pstmt.setDate(5, boardVO.getLastpost());	
+			pstmt.setInt(5, boardVO.getViews());	
+			pstmt.setString(6, boardVO.getFilename());
 			int r = pstmt.executeUpdate(sql);
 			
 			//3.결과처리

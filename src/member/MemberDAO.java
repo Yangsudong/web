@@ -3,7 +3,11 @@ package member;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import common.ConnectionManager;
 
@@ -19,7 +23,7 @@ public class MemberDAO {
 		
 		try {
 			conn = ConnectionManager.getConnnect();
-			String sql = " SELECT ID, PASS, GENDER, JOB, MAILYN, REASON"
+			String sql = " SELECT ID, PASS, GENDER, JOB, MAILYN, REASON, HOBBY, REGDATE"
 					   + " FROM MEMBERS"
 					   + " ORDER BY ID ";
 			
@@ -34,6 +38,8 @@ public class MemberDAO {
 				resultVO.setJob(rs.getString(4));
 				resultVO.setMailYN(rs.getString(5));
 				resultVO.setReason(rs.getString(6));
+				resultVO.setHobby(rs.getString(7));
+				resultVO.setRegdate(rs.getString(8));
 				list.add(resultVO);
 			} 
 			
@@ -52,7 +58,7 @@ public class MemberDAO {
 		
 		try {
 			conn = ConnectionManager.getConnnect();
-			String sql = " SELECT ID, PASS, GENDER, JOB, MAILYN, REASON"
+			String sql = " SELECT ID, PASS, GENDER, JOB, MAILYN, REASON, HOBBY, REGDATE"
 					   + " FROM MEMBERS"
 					   + " WHERE ID = ?";
 			pstmt = conn.prepareStatement(sql);
@@ -66,6 +72,8 @@ public class MemberDAO {
 				resultVO.setJob(rs.getString(4));
 				resultVO.setMailYN(rs.getString(5));
 				resultVO.setReason(rs.getString(6));
+				resultVO.setHobby(rs.getString(7));
+				resultVO.setRegdate(rs.getString(8));
 				
 			} else {
 				System.out.println("아이디가 없습니다");
@@ -79,10 +87,52 @@ public class MemberDAO {
 		return resultVO;
 	}
 	
+	//메일수신회원수 :  select count(id) cnt from members where mailYn='y'; 
+	public int getMailynCnt() {
+		int cnt = 0;
+		try {
+			conn = ConnectionManager.getConnnect();
+			String sql = "SELECT COUNT(ID) CNT FROM MEMBERS WHERE MAILYN='Y'";
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			rs.next();
+			cnt = rs.getInt(1);
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionManager.close(conn);
+		}
+		return cnt;
+	}
+	
+	// 성별인원수 : select gender, count(id) cnt from members group by gender;
+	public List<HashMap<String, Object>> getGenderCnt() {
+		List<HashMap<String, Object>> list =
+								new ArrayList<HashMap<String, Object>>();
+		try {
+			conn = ConnectionManager.getConnnect();
+			String sql = "SELECT GENDER, COUNT(ID) CNT FROM MEMBERS GROUP BY GENDER";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("gender", rs.getString("gender"));
+				map.put("cnt", rs.getInt("cnt"));
+				list.add(map);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionManager.close(conn);
+		}
+		return list;
+	}
+	
+	
 	public void delete(MemberVO memberVO) {
 		try {
 			conn = ConnectionManager.getConnnect();
-			String sql = "delete from members where id = ?";
+			String sql = "DELETE FROM MEMBERS WHERE ID = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, memberVO.getId());
 			int r = pstmt.executeUpdate();
@@ -98,7 +148,7 @@ public class MemberDAO {
 	public void update(MemberVO memberVO) {
 		try {
 			conn = ConnectionManager.getConnnect();
-			String sql = "update members set pass = ? where id = ?";
+			String sql = "UPDATE MEMBERS SET PASS = ? WHERE ID = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, memberVO.getPass());
 			pstmt.setString(2, memberVO.getId());
@@ -118,7 +168,7 @@ public class MemberDAO {
 		 conn = ConnectionManager.getConnnect();
 			
 			//2.sql 구문 실행
-			String sql = "insert into members values(?,?,?,?,?,?)"; 
+			String sql = "INSERT INTO MEMBERS VALUES(?,?,?,?,?,?,?,sysdate)"; 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, memberVO.getId());
 			pstmt.setString(2, memberVO.getPass());	
@@ -126,7 +176,8 @@ public class MemberDAO {
 			pstmt.setString(4, memberVO.getJob());	
 			pstmt.setString(5, memberVO.getMailYN());	
 			pstmt.setString(6, memberVO.getReason());	
-			int r = pstmt.executeUpdate(sql);
+			pstmt.setString(7, memberVO.getHobby());
+			int r = pstmt.executeUpdate();
 			
 			//3.결과처리
 			System.out.println(r + "건이 처리됨");
