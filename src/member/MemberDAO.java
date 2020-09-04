@@ -16,6 +16,14 @@ public class MemberDAO {
 	PreparedStatement pstmt;
 	ResultSet rs;
 	
+	//싱글톤
+	static MemberDAO instance;
+	public static MemberDAO getInstance() {
+		if(instance==null)
+			instance=new MemberDAO();
+			return instance;
+	}
+	
 	//전체조회
 	public ArrayList<MemberVO> selectAll(MemberVO memberVO) {
 		MemberVO resultVO = null;
@@ -148,10 +156,15 @@ public class MemberDAO {
 	public void update(MemberVO memberVO) {
 		try {
 			conn = ConnectionManager.getConnnect();
-			String sql = "UPDATE MEMBERS SET PASS = ? WHERE ID = ?";
+			String sql = "UPDATE MEMBERS SET PASS = ?,GENDER = ?, JOB = ?, MAILYN = ?,HOBBY = ?, REASON = ? WHERE ID = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, memberVO.getPass());
-			pstmt.setString(2, memberVO.getId());
+			pstmt.setString(2, memberVO.getGender());
+			pstmt.setString(3, memberVO.getJob());
+			pstmt.setString(4, memberVO.getMailYN());
+			pstmt.setString(5, memberVO.getHobby());
+			pstmt.setString(6, memberVO.getReason());
+			pstmt.setString(7, memberVO.getId());
 			int r = pstmt.executeUpdate();
 			System.out.println(r + "건이 입력됨");
 		} catch (Exception e) {

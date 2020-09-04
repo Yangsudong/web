@@ -9,6 +9,7 @@
 <title>memberStat.jsp</title>
 </head>
 <body>
+<%@include file="/common/header.jsp" %>
 <h3>회원통계</h3>
 <h5>남여 비율</h5>
 <% List<HashMap<String, Object>> list =

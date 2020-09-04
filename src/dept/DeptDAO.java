@@ -14,6 +14,14 @@ public class DeptDAO {
 	PreparedStatement pstmt;
 	ResultSet rs;
 	
+	//싱글톤
+	static DeptDAO instance;
+	public static DeptDAO getInstance() {
+		if(instance==null)
+		   instance=new DeptDAO();
+		return instance;
+	}
+	
 	//전체조회
 	public ArrayList<DeptVO> selectAll(DeptVO deptVO) {
 		DeptVO resultVO = null;
@@ -120,14 +128,14 @@ public class DeptDAO {
 		 conn = ConnectionManager.getConnnect();
 			
 			//2.sql 구문 실행
-			String sql = "INSERT INTO HR.DEPARTMENTS (DEPARTMENT_ID, DEPARTMENT_NAME)" 
-						+ " values ( " 
-						+ deptVO.getDepartment_id() 
-						+ ",'"
-						+ deptVO.getDepartment_name() 
-						+ "')";
-			Statement stmt = conn.createStatement();
-			int r = stmt.executeUpdate(sql);
+			String sql = "INSERT INTO HR.DEPARTMENTS (DEPARTMENT_ID, DEPARTMENT_NAME, LOCATION_ID, MANAGER_ID)" 
+						+ " values (?,?,?,?)";
+			pstmt = conn.prepareStatement(sql); 
+			pstmt.setInt(1, deptVO.getDepartment_id());
+			pstmt.setString(2, deptVO.getDepartment_name());
+			pstmt.setInt(3, deptVO.getLocation_id());
+			pstmt.setInt(4, deptVO.getManager_id());			
+			int r = pstmt.executeUpdate();
 			
 			//3.결과처리
 			System.out.println(r + "건이 처리됨");

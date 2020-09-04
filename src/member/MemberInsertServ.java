@@ -31,6 +31,7 @@ public class MemberInsertServ extends HttpServlet {
 
 	// 등록 처리
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		request.setCharacterEncoding("UTF-8");
 		
 		//파라미터를 VO에 담기

@@ -2,6 +2,8 @@
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +11,7 @@
 <title>memberAll</title>
 </head>
 <body>
+<%@include file="/common/header.jsp" %>
 	<h3 class="page_title">회원 전체조회</h3>
 	<div>
 	<ul class="search">
@@ -32,22 +35,25 @@
 			</tr>
 		</thead>
 		<tbody>
-		<%
-			ArrayList<MemberVO> list = 
-					(ArrayList<MemberVO>)request.getAttribute("list");
-			for(MemberVO member : list) {			
-		%>
+		 <c:forEach items="${list}" var="member">		
 			<tr height="30">
-				<td><a href="memberSelect.jsp"><%=member.getId()%></a></td>
-				<td><%=member.getPass()%></td>
-				<td><%=member.getGender()%></td>  
-				<td><%=member.getJob()%></td>  
-				<td><%=member.getMailYN()%></td>  
-				<td><%=member.getReason()%></td>
-				<td><%=member.getHobby()%></td> 
-				<td><%=member.getRegdate()%></td>				
+				<td><a href="memberSelect.jsp">${member.id}</a></td>
+				<td>${member.pass}</td>
+				<td>${member.gender}</td>  
+				<td>${member.job}</td>  
+				<td>
+					<c:if test="${member.mailYN == 'y'}"> 
+						<button type="button">메일발송 </button>
+					</c:if>					
+				</td>  
+				<td>${member.reason}</td>
+				<td>${member.hobby}</td> 
+				<td>
+				<fmt:parseDate value="${member.regdate}" pattern="yyyy-MM-dd" var="day" />
+				<fmt:formatDate value="${day}" pattern="MM/dd"/>					
+				</td>				
 			</tr>
-		<% } %>
+		</c:forEach>
 		</tbody>
 	</table>
 </body>

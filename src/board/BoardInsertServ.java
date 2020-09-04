@@ -7,11 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.beanutils.BeanUtils;
 
-import member.MemberDAO;
 
-@WebServlet("board/boardInsertServ.do")
+@WebServlet("/board/boardInsertServ.do")
 public class BoardInsertServ extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -30,13 +28,13 @@ public class BoardInsertServ extends HttpServlet {
 		
 		BoardVO boardVO = new BoardVO();
 		
-		boardVO.setNo(Integer.parseInt(request.getParameter("no")));
 		boardVO.setPoster(request.getParameter("poster"));
 		boardVO.setSubject(request.getParameter("subject"));
 		boardVO.setContents(request.getParameter("contents"));
-		boardVO.setLastpost(request.getParameter("lastpost"));
-		boardVO.setViews(Integer.parseInt(request.getParameter("views")));
-		boardVO.setFilename(request.getParameter("filename"));
+		boardVO.setNo(Integer.parseInt(request.getParameter("no")));
+//		boardVO.setLastpost(request.getParameter("lastpost"));
+//		boardVO.setViews(Integer.parseInt(request.getParameter("views")));
+//		boardVO.setFilename(request.getParameter("filename"));
 		
 		//DB 등록처리
 		BoardDAO dao = new BoardDAO();

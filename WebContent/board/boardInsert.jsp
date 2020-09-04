@@ -25,7 +25,7 @@ function inputCheck() {
 <body>
 <h3 class="page_title">게시판</h3>
 <form method="post" name="frm" id="frm" 
-		action = "boardInsert.do"
+		action = "boardInsertServ.do"
 		onsubmit="return inputCheck()">
 	<div class="regist">		
 		<label>작성자</label><input type="text" name="poster">

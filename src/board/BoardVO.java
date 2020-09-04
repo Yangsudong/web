@@ -1,6 +1,5 @@
 package board;
 
-import java.sql.Date;
 
 public class BoardVO {
 	private Integer no;		

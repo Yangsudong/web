@@ -9,6 +9,7 @@
 <title>deptSelectAll.jsp</title>
 </head>
 <body>
+<%@include file="/common/header.jsp" %>
 <table border="1">
 <% 
 ArrayList<DeptVO> list = (ArrayList<DeptVO>)request.getAttribute("list");
@@ -17,6 +18,8 @@ ArrayList<DeptVO> list = (ArrayList<DeptVO>)request.getAttribute("list");
 	<tr>
 		<td><a href="deptSelect?department_id=<%=dept.getDepartment_id()%>"><%=dept.getDepartment_id()%></a></td>
 		<td><%=dept.getDepartment_name()%></td>
+		<td><%=dept.getLocation_id() %></td>
+		<td><%=dept.getManager_id() %>
 	</tr>
 <% } %>
 </table>
