@@ -22,6 +22,34 @@ public class DeptDAO {
 		return instance;
 	}
 	
+	public int count(DeptVO deptVO) {
+		int cnt = 0;
+		try {
+			conn = ConnectionManager.getConnnect();
+			String where = "where 1=1";
+			if(deptVO.getDepartment_name() !=null) {
+				where += "and department_name like '%' || ? ||  '%'";
+			}
+			
+			String sql = "select count(*) from hr.departments " + where;
+			pstmt = conn.prepareStatement(sql);
+			
+			int pos = 1;
+			if(deptVO.getDepartment_name() !=null) {
+				pstmt.setString(pos++, deptVO.getDepartment_name());
+			}
+			
+			rs = pstmt.executeQuery();
+			rs.next();
+			cnt = rs.getInt(1); 
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.close(conn);
+		}
+		return cnt;
+	}
+	
 	//전체조회
 	public ArrayList<DeptVO> selectAll(DeptVO deptVO) {
 		DeptVO resultVO = null;
@@ -29,11 +57,25 @@ public class DeptDAO {
 		
 		try {
 			conn = ConnectionManager.getConnnect();
-			String sql = " SELECT DEPARTMENT_ID, DEPARTMENT_NAME, MANAGER_ID mgr_id, LOCATION_ID"
-					   + " FROM HR.DEPARTMENTS"
-					   + " ORDER BY DEPARTMENT_ID ";
+			String where = "where 1=1";
+			if(deptVO.getDepartment_name() !=null) {
+				where += " and department_name like '%' || ? ||  '%'";
+			}
+			String sql = " SELECT A.* FROM( SELECT  B.*, ROWNUM RM FROM("
+					   + " SELECT DEPARTMENT_ID, DEPARTMENT_NAME, MANAGER_ID MGR_ID, LOCATION_ID"
+					   + " FROM HR.DEPARTMENTS "
+					   +   where
+					   + " ORDER BY DEPARTMENT_ID "
+					   + " ) B) A WHERE RM BETWEEN ? AND ?";
 			
 			pstmt = conn.prepareStatement(sql);			
+			int pos = 1;
+			if(deptVO.getDepartment_name() != null) {
+				pstmt.setString(pos++, deptVO.getDepartment_name());
+			}
+			
+			pstmt.setInt(pos++, deptVO.getFirst());
+			pstmt.setInt(pos++, deptVO.getLast());
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
