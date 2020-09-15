@@ -35,7 +35,7 @@ public class JobDAO {
 				JobVO job = new JobVO();
 				job.setJob_id(rs.getString("job_id"));
 				job.setJob_title(rs.getString("job_title"));
-				datas.add(job);   //dto를 리스트에 추가
+				datas.add(job); 
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

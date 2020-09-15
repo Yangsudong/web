@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import javax.naming.spi.DirStateFactory.Result;
 
 import common.ConnectionManager;
 
@@ -16,6 +15,14 @@ public class BoardDAO {
 	PreparedStatement pstmt;
 	ResultSet rs;
 	
+	//싱글톤
+		static BoardDAO instance;
+		public static BoardDAO getInstance() {
+			if(instance==null)
+			   instance=new BoardDAO();
+			return instance;
+		}
+	
 	//전체조회
 	public ArrayList<BoardVO> selectAll(BoardVO boardVO) {
 		BoardVO resultVO = null;
@@ -23,7 +30,7 @@ public class BoardDAO {
 		
 		try {
 			conn = ConnectionManager.getConnnect();
-			String sql = " SELECT NO, POSTER, SUBJECT, CONTENTS, LASTPOST, VIEWS, FILENUMBER"
+			String sql = " SELECT NO, POSTER, SUBJECT, CONTENTS, LASTPOST, VIEWS, FILENAME"
 					   + " FROM BOARD"
 					   + " ORDER BY NO ";
 			
@@ -58,7 +65,7 @@ public class BoardDAO {
 		try {
 			conn = ConnectionManager.getConnnect();
 			String sql = " SELECT NO, POSTER, SUBJECT, CONTENTS, LASTPOST, VIEWS, FILENAME"
-					   + " FROM MEMBERS"
+					   + " FROM BOARD"
 					   + " WHERE NO = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1,boardVO.getNo());
@@ -130,6 +137,7 @@ public class BoardDAO {
 		 ResultSet rs = stmt.executeQuery(seqSql);
 		 rs.next();
 		 int no = rs.getInt(1);
+		 boardVO.setNo(no);
 		 
 		 //보드번호 업데이트
 		 seqSql = "update seq set no = no + 1 where tablename = 'board'";
@@ -137,13 +145,14 @@ public class BoardDAO {
 		 stmt.executeUpdate(seqSql);
 		 
 		 // 게시글 등록
-		 String sql = "INSERT INTO BOARD (lastpost, contents, subject, poster, no)"
-		 				+ " values(sysdate,?,?,?,?)"; 
+		 String sql = "INSERT INTO BOARD (lastpost, contents, subject, poster, no, filename)"
+		 				+ " values(sysdate,?,?,?,?,?)"; 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, boardVO.getPoster());
 			pstmt.setString(2, boardVO.getSubject());	
 			pstmt.setString(3, boardVO.getContents());	
 			pstmt.setInt(4, no);
+			pstmt.setString(5, boardVO.getFilename());	
 			pstmt.executeUpdate();
 			conn.commit();
 			

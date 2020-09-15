@@ -7,13 +7,7 @@
 <title>Insert title here</title>
 <script>
 function inputCheck() {
-	//id, pw 필수입력체크
-	if(frm.no.value == ""){
-		window.alert("번호 입력");
-		frm.no.focus();
-		return false; 
-	}
-	if(frm.poster.value == ""){
+		if(frm.poster.value == ""){
 		alert("작성자 입력");
 		frm.poster.focus();
 		return false;		
@@ -26,6 +20,7 @@ function inputCheck() {
 <h3 class="page_title">게시판</h3>
 <form method="post" name="frm" id="frm" 
 		action = "boardInsertServ.do"
+		enctype="multipart/form-data"
 		onsubmit="return inputCheck()">
 	<div class="regist">		
 		<label>작성자</label><input type="text" name="poster">
@@ -37,7 +32,7 @@ function inputCheck() {
 		<label>내용</label><br><textarea id="contents" name="contents"></textarea><br>
 	</div><br>
 	<div>
-		<label>첨부파일</label><input type="file" name="files" size="30"><br>
+		<label>첨부파일</label><input type="file" name="filename" size="30"><br>
 	</div><br><br>	
 	
 	<div>

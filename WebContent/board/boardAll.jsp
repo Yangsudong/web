@@ -2,6 +2,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri ="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,29 +24,32 @@
 			<tr>
 				<th width="100" height="50">번호</th>
 				<th width="100">작성자</th>
-				<th width="50">제목</th>
+				<th width="100">제목</th>
 				<th width="200">내용</th>
 				<th width="150">작성일자</th>
 				<th width="150">조회수</th>
 				<th width="200">첨부파일</th>
+				<th>이미지</th>
 			</tr>
 		</thead>
 		<tbody>
-		<%
-			ArrayList<BoardVO> list = 
-					(ArrayList<BoardVO>)request.getAttribute("list");
-			for(BoardVO board : list) {			
-		%>
+		
+		<c:forEach items = "${list}" var="board">		
 			<tr height="30">
-				<td><a href="memberSelect.jsp"><%=board.getNo()%></a></td>
-				<td><%=board.getNo()%></td>
-				<td><%=board.getPoster()%></td>  
-				<td><%=board.getSubject()%></td>  
-				<td><%=board.getLastpost()%></td>  
-				<td><%=board.getViews()%></td>
-				<td><%=board.getFilename()%></td> 
+				<td><a href="memberSelect.jsp">${board.no}</a></td>
+				<td>${board.poster}</td>  
+				<td>${board.subject}</td>  
+				<td>${board.contents}</td> 
+				<td>${board.lastpost}</td>  
+				<td>${board.views}</td>
+				<td><a href="download.do?filename=${board.filename}"> ${board.filename} </a></td> 
+				<td>
+					<c:if test="${not empty board.filename}">
+						<img src="../images/${board.filename}" style="width:300px">
+					</c:if>
+				</td>
 			</tr>
-		<% } %>
+		</c:forEach>
 		</tbody>
 	</table>
 </body>
